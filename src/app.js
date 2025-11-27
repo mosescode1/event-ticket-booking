@@ -5,6 +5,7 @@ import ticketRoutes from "./routes/ticket.js";
 import { rateLimit } from "express-rate-limit";
 import errorHandler from "./middleware/errorHandler.js";
 import ApiError from "./utils/ApiError.js";
+import database from "./database/db.js";
 
 const app = express();
 

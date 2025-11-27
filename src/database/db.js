@@ -18,15 +18,7 @@ class Database {
       synchronize: true,
     });
 
-    this.dataSource
-      .initialize()
-      .then(() => {
-        console.log("Database connected successfully");
-      })
-      .catch((err) => {
-        console.error("Database connection error:", err);
-      });
-
+    this.dataSource.initialize();
     Database._instance = this;
   }
 
