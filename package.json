@@ -1,0 +1,40 @@
+{
+  "name": "event-ticket-booking",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A Backend Assesment on event booking",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon src/server.js",
+    "typeorm": "typeorm-ts-node-commonjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/mosescode1/event-ticket-booking.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mosescode1/event-ticket-booking/issues"
+  },
+  "homepage": "https://github.com/mosescode1/event-ticket-booking#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "pg": "^8.14.1",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
+    "typeorm": "0.3.27"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "keywords": []
+}
