@@ -3,6 +3,8 @@ import authRoutes from "./routes/auth.js";
 import eventRoutes from "./routes/event.js";
 import ticketRoutes from "./routes/ticket.js";
 import { rateLimit } from "express-rate-limit";
+import errorHandler from "./middleware/errorHandler.js";
+import ApiError from "./utils/ApiError.js";
 
 const app = express();
 
@@ -15,17 +17,21 @@ const limiter = rateLimit({
 
 app.use(express.json());
 
-app.use(limiter);
+// Apply rate limiter except during tests
+if (process.env.NODE_ENV !== "test") {
+  app.use(limiter);
+}
+
 app.use("/auth", authRoutes);
 app.use("/events", eventRoutes);
 app.use("/tickets", ticketRoutes);
 
-app.use("/*splat", (req, res) => {
-  res.status(404).json({
-    message: `Route not found`,
-    status: 404,
-    path: req.originalUrl,
-  });
+// 404 forwarding to centralized error handler
+app.use((req, res, next) => {
+  next(ApiError.notFound("Route not found", { path: req.originalUrl }));
 });
+
+// Centralized error handler
+app.use(errorHandler);
 
 export { app };

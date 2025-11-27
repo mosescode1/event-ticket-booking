@@ -1,23 +1,20 @@
 import ticketRepo from "../repository/ticket.js";
+import ApiError from "../utils/ApiError.js";
 
 class TicketController {
   /**
    * BOOK A TICKET OR JOIN WAITLIST
    */
-  async bookTicket(req, res) {
+  async bookTicket(req, res, next) {
     try {
       if (!req.body) {
-        return res.status(400).json({
-          message: "missing request body",
-        });
+        throw ApiError.badRequest("Missing request body");
       }
 
       const { eventId, fullName } = req.body;
 
       if (!eventId || !fullName) {
-        return res.status(400).json({
-          error: "eventId and fullName are required",
-        });
+        throw ApiError.badRequest("eventId and fullName are required");
       }
 
       const result = await ticketRepo.createTicket(eventId, fullName);
@@ -30,38 +27,29 @@ class TicketController {
         data: result,
       });
     } catch (error) {
-      console.error("Error booking ticket:", error);
-      return res.status(500).json({
-        error: "Internal Server Error",
-      });
+      return next(error);
     }
   }
 
   /**
    * CANCEL A TICKET AND PROMOTE NEXT WAITLIST USER
    */
-  async cancelTicket(req, res) {
+  async cancelTicket(req, res, next) {
     try {
       const { ticketId } = req.body;
 
       if (!ticketId) {
-        return res.status(400).json({
-          error: "ticketId is required",
-        });
+        throw ApiError.badRequest("ticketId is required");
       }
 
       const result = await ticketRepo.cancelTicket(ticketId);
 
       return res.status(200).json({
         message: "Ticket cancelled",
-        cancelled: result.cancelled,
         promoted: result.promoted,
       });
     } catch (error) {
-      console.error("Error cancelling ticket:", error);
-      return res.status(500).json({
-        error: "Internal Server Error",
-      });
+      return next(error);
     }
   }
 }

@@ -1,16 +1,15 @@
 import userRepo from "../repository/user.js";
+import ApiError from "../utils/ApiError.js";
 
 class AuthController {
-  async register(req, res) {
+  async register(req, res, next) {
     try {
       if (!req.body) {
-        return res.status(400).json({ message: "Missing request body" });
+        throw ApiError.badRequest("Missing request body");
       }
       const { userName, password } = req.body;
       if (!userName || !password) {
-        return res
-          .status(400)
-          .json({ message: "Missing username or password" });
+        throw ApiError.badRequest("Missing username or password");
       }
       const role = "admin";
       const user = await userRepo.createUser(userName, password, role);
@@ -18,8 +17,7 @@ class AuthController {
         .status(201)
         .json({ message: "User registered successfully", user });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
+      return next(error);
     }
   }
 }

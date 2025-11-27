@@ -1,28 +1,26 @@
 import database from "../database/db.js";
 import eventRepo from "../repository/event.js";
+import ApiError from "../utils/ApiError.js";
 
 class EventController {
-  async initializeEvent(req, res) {
+  async initializeEvent(req, res, next) {
     try {
       if (!req.body) {
-        return res.status(400).json({
-          statusCode: 400,
-          message: "missing request body",
-        });
+        throw ApiError.badRequest("Missing request body");
       }
 
       const { name, availableTickets } = req.body;
 
-      if (!name || !availableTickets) {
-        return res.status(400).json({
-          message: "missing event name or availableTickets",
-        });
+      console.log(req.body);
+
+      if (!name || availableTickets === undefined) {
+        throw ApiError.badRequest("Missing event name or availableTickets");
       }
 
-      if (typeof availableTickets === "string") {
-        return res.status(400).json({
-          message: "availableTickets must be a number",
-        });
+      if (typeof availableTickets !== "number" || availableTickets < 0) {
+        throw ApiError.badRequest(
+          "availableTickets must be a non-negative number",
+        );
       }
 
       const event = await eventRepo.createEvent(name, availableTickets);
@@ -32,28 +30,22 @@ class EventController {
         data: event,
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      return next(error);
     }
   }
 
-  async getEventStatus(req, res) {
+  async getEventStatus(req, res, next) {
     try {
       const { eventId } = req.params;
-      if (!eventId)
-        return res.status(400).json({
-          message: "missing eventId parameter",
-        });
+      if (!eventId) throw ApiError.badRequest("Missing eventId parameter");
 
       const status = await eventRepo.getEventById(eventId);
+      if (!status) throw ApiError.notFound("Event not found");
       return res.status(200).json({
         data: status,
       });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: "internal server error",
-      });
+      return next(error);
     }
   }
 }

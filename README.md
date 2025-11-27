@@ -48,12 +48,12 @@ Initialize a new event. requires basic auth
 ```json
 {
   "name": "eventTribe",
-  "seats": 100
+  "availableTickets": 1
 }
 ```
 
 ### POST tickets/book
-Book a ticket.
+Book a ticket. requires basic auth
 ```json
 
 {
@@ -66,7 +66,7 @@ Book a ticket.
 Cancel a booking.
 ```json
 {
-    "eventId": 1,
+    "ticketId": 1,
     "fullName": "femi"
 }
 ```
