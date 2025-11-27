@@ -5,7 +5,7 @@
   "description": "A Backend Assesment on event booking",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --detectOpenHandles --forceExit",
     "start": "npx nodemon src/server.js",
     "typeorm": "typeorm-ts-node-commonjs"
   },
