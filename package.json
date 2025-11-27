@@ -10,8 +10,7 @@
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://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@github.com/mosescode1/event-ticket-booking.git"
+    "type": "git"
   },
   "author": "",
   "license": "ISC",
